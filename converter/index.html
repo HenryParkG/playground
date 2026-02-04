@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단위 변환기 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .converter-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .converter-group input {
+            width: 60%;
+            margin-bottom: 0;
+        }
+
+        .converter-group select {
+            width: 35%;
+            margin-bottom: 0;
+        }
+
+        .arrow {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>단위 변환기</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+            <h3 style="margin-bottom: 1rem; text-align: left;">길이/무게 변환</h3>
+
+            <div class="converter-group">
+                <input type="number" id="inputVal" oninput="convert()" placeholder="값 입력">
+                <select id="inputUnit" onchange="convert()">
+                    <option value="m">미터 (m)</option>
+                    <option value="cm">센티미터 (cm)</option>
+                    <option value="km">킬로미터 (km)</option>
+                    <option value="inch">인치 (inch)</option>
+                    <option value="ft">피트 (ft)</option>
+                    <option value="kg">킬로그램 (kg)</option>
+                    <option value="lb">파운드 (lb)</option>
+                </select>
+            </div>
+
+            <div class="arrow">⬇️</div>
+
+            <div class="converter-group">
+                <input type="number" id="outputVal" readonly>
+                <select id="outputUnit" onchange="convert()">
+                    <option value="m">미터 (m)</option>
+                    <option value="cm" selected>센티미터 (cm)</option>
+                    <option value="km">킬로미터 (km)</option>
+                    <option value="inch">인치 (inch)</option>
+                    <option value="ft">피트 (ft)</option>
+                    <option value="kg">킬로그램 (kg)</option>
+                    <option value="lb">파운드 (lb)</option>
+                </select>
+            </div>
+        </main>
+    </div>
+    <script>
+        const units = {
+            m: 1, cm: 0.01, km: 1000, inch: 0.0254, ft: 0.3048,
+            kg: 1, lb: 0.453592
+        };
+        const types = {
+            m: 'length', cm: 'length', km: 'length', inch: 'length', ft: 'length',
+            kg: 'weight', lb: 'weight'
+        };
+
+        function convert() {
+            const val = parseFloat(document.getElementById('inputVal').value);
+            const from = document.getElementById('inputUnit').value;
+            const to = document.getElementById('outputUnit').value;
+
+            if (isNaN(val)) {
+                document.getElementById('outputVal').value = '';
+                return;
+            }
+
+            if (types[from] !== types[to]) {
+                document.getElementById('outputVal').value = "단위 불일치";
+                return;
+            }
+
+            // Convert to base unit (m or kg) then to target
+            const base = val * units[from];
+            const result = base / units[to];
+
+            // Format to avoid long decimals
+            document.getElementById('outputVal').value = Number(result.toPrecision(6));
+        }
+    </script>
+</body>
+
+</html>

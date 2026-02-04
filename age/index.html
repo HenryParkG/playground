@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>만 나이 계산기 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>만 나이 계산기</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+            <label>생년월일을 입력하세요</label>
+            <input type="date" id="dob" style="margin-top: 0.5rem;">
+
+            <button class="btn" onclick="calcAge()" style="width: 100%;">계산하기</button>
+
+            <div id="result" style="display: none; margin-top: 2rem;">
+                <h2 id="ageMain" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 0.5rem;"></h2>
+                <p id="ageDetail" style="color: #cbd5e1;"></p>
+            </div>
+        </main>
+    </div>
+    <script>
+        function calcAge() {
+            const input = document.getElementById('dob').value;
+            if (!input) return alert('생년월일을 입력해주세요');
+
+            const dob = new Date(input);
+            const today = new Date();
+
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            document.getElementById('ageMain').textContent = `만 ${age}세`;
+
+            // Precise calculation
+            const diffTime = Math.abs(today - dob);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('ageDetail').textContent = `태어난 지 ${diffDays.toLocaleString()}일 되었습니다.`;
+
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI 계산기 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .bmi-result {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 1rem 0;
+        }
+
+        .bmi-label {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>BMI 계산기</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+            <div style="display: flex; gap: 1rem;">
+                <input type="number" id="height" placeholder="신장 (cm)">
+                <input type="number" id="weight" placeholder="체중 (kg)">
+            </div>
+
+            <button class="btn" onclick="calcBMI()" style="width: 100%; margin-top: 0.5rem;">계산하기</button>
+
+            <div id="result"
+                style="display: none; margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                <div class="bmi-result" id="bmiVal">0.0</div>
+                <div class="bmi-label" id="bmiText">정상</div>
+                <p style="font-size: 0.9rem; color: #94a3b8;">* BMI는 단순 참고용입니다.</p>
+            </div>
+        </main>
+    </div>
+    <script>
+        function calcBMI() {
+            const h = parseFloat(document.getElementById('height').value);
+            const w = parseFloat(document.getElementById('weight').value);
+
+            if (!h || !w) return alert('키와 몸무게를 입력해주세요');
+
+            const bmi = w / ((h / 100) * (h / 100));
+            document.getElementById('bmiVal').textContent = bmi.toFixed(1);
+
+            let text = '';
+            let color = '#fff';
+            if (bmi < 18.5) { text = '저체중'; color = '#3b82f6'; }
+            else if (bmi < 23) { text = '정상'; color = '#22c55e'; }
+            else if (bmi < 25) { text = '과체중'; color = '#eab308'; }
+            else { text = '비만'; color = '#ef4444'; }
+
+            const txtEl = document.getElementById('bmiText');
+            txtEl.textContent = text;
+            txtEl.style.color = color;
+
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

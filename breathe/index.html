@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>호흡 앱 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .circle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .circle {
+            background: radial-gradient(circle, #38bdf8, #818cf8);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 1;
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.4);
+        }
+
+        .text {
+            position: absolute;
+            z-index: 2;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .breathe-anim {
+            animation: breathe 8s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% {
+                transform: scale(1);
+            }
+
+            40% {
+                transform: scale(2.5);
+            }
+
+            60% {
+                transform: scale(2.5);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>심호흡</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <p style="margin-bottom: 2rem;">마음을 차분하게 가라앉혀보세요</p>
+
+            <div class="circle-container" id="container" onclick="toggle()">
+                <div class="circle" id="circle"></div>
+                <div class="text" id="text">시작하려면 클릭</div>
+            </div>
+        </main>
+    </div>
+    <script>
+        let making = false;
+        let interval;
+
+        function toggle() {
+            if (!making) {
+                making = true;
+                document.getElementById('circle').classList.add('breathe-anim');
+                document.getElementById('text').textContent = "Inhale...";
+                runCycle();
+            } else {
+                making = false;
+                document.getElementById('circle').classList.remove('breathe-anim');
+                document.getElementById('text').textContent = "시작하려면 클릭";
+                clearTimeout(interval);
+            }
+        }
+
+        function runCycle() {
+            if (!making) return;
+            document.getElementById('text').textContent = "숨 들이마시기...";
+
+            interval = setTimeout(() => {
+                if (!making) return;
+                document.getElementById('text').textContent = "멈춤";
+
+                setTimeout(() => {
+                    if (!making) return;
+                    document.getElementById('text').textContent = "숨 내뱉기...";
+
+                    setTimeout(() => {
+                        runCycle(); // Loop
+                    }, 3200); // Exhale duration matches animation logic remainder
+                }, 1600); // Hold duration
+            }, 3200); // Inhale duration
+        }
+    </script>
+</body>
+
+</html>

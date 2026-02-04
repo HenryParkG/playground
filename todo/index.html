@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>할 일 목록 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .todo-input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .todo-input-group input {
+            margin-bottom: 0;
+        }
+
+        ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.05);
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li.done span {
+            text-decoration: line-through;
+            color: #64748b;
+        }
+
+        .del-btn {
+            background: #ef4444;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>할 일 목록</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 500px; margin: 0 auto; text-align: center;">
+            <div class="todo-input-group">
+                <input type="text" id="input" placeholder="할 일을 입력하세요..." onkeypress="if(event.key==='Enter') add()">
+                <button class="btn" onclick="add()">추가</button>
+            </div>
+            <ul id="list"></ul>
+        </main>
+    </div>
+    <script>
+        // Simple Storage logic
+        let todos = JSON.parse(localStorage.getItem('pg_todos')) || [];
+
+        function save() {
+            localStorage.setItem('pg_todos', JSON.stringify(todos));
+            render();
+        }
+
+        function render() {
+            const list = document.getElementById('list');
+            list.innerHTML = '';
+            todos.forEach((todo, idx) => {
+                const li = document.createElement('li');
+                if (todo.done) li.className = 'done';
+                li.innerHTML = `
+                    <span onclick="toggle(${idx})" style="cursor: pointer; flex: 1;">${todo.text}</span>
+                    <button class="btn del-btn" onclick="del(${idx})">삭제</button>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        function add() {
+            const val = document.getElementById('input').value;
+            if (!val) return;
+            todos.push({ text: val, done: false });
+            document.getElementById('input').value = '';
+            save();
+        }
+
+        function toggle(idx) {
+            todos[idx].done = !todos[idx].done;
+            save();
+        }
+
+        function del(idx) {
+            todos.splice(idx, 1);
+            save();
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

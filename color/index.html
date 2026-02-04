@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>색상 팔레트 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .palette {
+            display: flex;
+            height: 300px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-strip {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 2rem;
+            cursor: pointer;
+            transition: flex 0.2s;
+        }
+
+        .color-strip:hover {
+            flex: 1.5;
+        }
+
+        .hex-code {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>색상 팔레트</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <p style="margin-bottom: 1rem;">클릭하여 색상 코드를 복사하세요</p>
+            <div class="palette" id="palette"></div>
+            <button class="btn" onclick="gen()">새로운 팔레트 생성</button>
+        </main>
+    </div>
+    <script>
+        function gen() {
+            const container = document.getElementById('palette');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                const col = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+                const div = document.createElement('div');
+                div.className = 'color-strip';
+                div.style.backgroundColor = col;
+                div.innerHTML = `<span class="hex-code">${col.toUpperCase()}</span>`;
+                div.onclick = () => {
+                    navigator.clipboard.writeText(col);
+                    const span = div.querySelector('span');
+                    const original = span.textContent;
+                    span.textContent = "Copied!";
+                    setTimeout(() => span.textContent = original, 1000);
+                };
+                container.appendChild(div);
+            }
+        }
+        gen();
+    </script>
+</body>
+
+</html>
