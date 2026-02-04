@@ -11,7 +11,7 @@ function generateLotto() {
 function displayLotto(numbers) {
     const container = document.getElementById('lottoResult');
     container.innerHTML = '';
-    
+
     numbers.forEach((num, index) => {
         const ball = document.createElement('div');
         ball.className = `ball ${getBallColorClass(num)}`;
@@ -37,7 +37,10 @@ const fortunes = [
     "새로운 인연이 생길 수 있는 날입니다. 열린 마음을 가져보세요.",
     "중요한 결정을 내리기 좋은 날입니다. 직관을 믿으세요.",
     "금전운이 상승하는 기운이 보입니다. 지출보다는 저축이 좋습니다.",
-    "오래된 친구에게 연락이 올 수 있습니다. 반갑게 맞아주세요."
+    "오래된 친구에게 연락이 올 수 있습니다. 반갑게 맞아주세요.",
+    "솔직한 대화가 오해를 풀 수 있는 열쇠가 됩니다.",
+    "예상치 못한 곳에서 기쁜 소식이 들려올 것입니다.",
+    "오늘은 과감한 도전이 좋은 결과를 가져올 수 있습니다."
 ];
 
 function checkSaju() {
@@ -47,18 +50,17 @@ function checkSaju() {
         return;
     }
 
-    // Simple randomization based on date string to give consistent result for same day/input
-    const today = new Date().toDateString();
-    const seed = dateInput + today;
-    let hash = 0;
-    for (let i = 0; i < seed.length; i++) {
-        hash = seed.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    
-    const index = Math.abs(hash) % fortunes.length;
+    // Purely random logic per click as requested
+    const index = Math.floor(Math.random() * fortunes.length);
     const resultText = document.getElementById('sajuText');
     const resultContainer = document.getElementById('sajuResult');
-    
+
+    // Reset animation if already shown to give feedback of new result
+    resultContainer.classList.remove('show');
+    resultContainer.classList.add('fade-out'); // Optional textual hint, but class switching is better
+    void resultContainer.offsetWidth; // Trigger reflow for animation restart
+
     resultText.textContent = fortunes[index];
+    resultContainer.classList.remove('fade-out');
     resultContainer.classList.add('show');
 }
