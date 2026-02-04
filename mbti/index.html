@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>초간단 MBTI - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .choice-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .progress {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            border-radius: 2px;
+        }
+
+        .bar {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>초간단 성향 테스트</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 600px; margin: 0 auto;">
+            <div class="progress">
+                <div class="bar" id="bar"></div>
+            </div>
+            <div id="quiz-box">
+                <h2 id="question" style="margin-bottom: 2rem;">질문</h2>
+                <div id="choices"></div>
+            </div>
+            <div id="result-box" style="display: none; text-align: center;">
+                <h2>당신의 성향은?</h2>
+                <h1 id="mbti-result" style="font-size: 3rem; margin: 2rem 0; color: var(--accent-color);"></h1>
+                <p id="desc"></p>
+                <button class="btn" onclick="location.reload()" style="margin-top: 2rem;">다시하기</button>
+            </div>
+        </main>
+    </div>
+    <script>
+        const questions = [
+            { q: "휴일에 나는?", a: "집에서 쉬는게 최고다 (I)", b: "나가서 친구들을 만난다 (E)", type: "IE" },
+            { q: "새로운 정보를 접할 때?", a: "현실적인 데이터를 본다 (S)", b: "미래의 가능성을 상상한다 (N)", type: "SN" },
+            { q: "결정을 내릴 때?", a: "논리와 이성이 중요하다 (T)", b: "사람들의 감정이 중요하다 (F)", type: "TF" },
+            { q: "여행 갈 때 나는?", a: "철저하게 계획을 짠다 (J)", b: "그때그때 기분에 따른다 (P)", type: "JP" }
+        ];
+
+        let current = 0;
+        let scores = { I: 0, E: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+        function showQ() {
+            const q = questions[current];
+            document.getElementById('question').textContent = q.q;
+            document.getElementById('bar').style.width = `${(current / questions.length) * 100}%`;
+
+            const choices = document.getElementById('choices');
+            choices.innerHTML = '';
+
+            const btnA = document.createElement('button');
+            btnA.className = 'choice-btn';
+            btnA.textContent = q.a;
+            btnA.onclick = () => next(q.type.charAt(0) === 'I' || q.type.charAt(0) === 'S' || q.type.charAt(0) === 'T' || q.type.charAt(0) === 'J' ? q.type.charAt(0) : q.type.charAt(1)); // Logic simplification for demo
+            // Actually let's just parse the letter from the answer string or use map
+            // Simplified: Just add point to first char of 'type' if A, second if B
+            btnA.onclick = () => next(q.type.charAt(0));
+
+            const btnB = document.createElement('button');
+            btnB.className = 'choice-btn';
+            btnB.textContent = q.b;
+            btnB.onclick = () => next(q.type.charAt(1));
+
+            choices.appendChild(btnA);
+            choices.appendChild(btnB);
+        }
+
+        function next(type) {
+            scores[type]++;
+            current++;
+            if (current < questions.length) {
+                showQ();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quiz-box').style.display = 'none';
+            document.getElementById('result-box').style.display = 'block';
+            document.getElementById('bar').style.width = '100%';
+
+            const mbti =
+                (scores.E > scores.I ? 'E' : 'I') +
+                (scores.N > scores.S ? 'N' : 'S') +
+                (scores.F > scores.T ? 'F' : 'T') +
+                (scores.P > scores.J ? 'P' : 'J');
+
+            document.getElementById('mbti-result').textContent = mbti;
+            document.getElementById('desc').textContent = "재미로 보는 당신의 초간단 성향 분석 결과입니다.";
+        }
+
+        showQ();
+    </script>
+</body>
+
+</html>

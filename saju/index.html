@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saju - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .date-inputs {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .date-inputs input {
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .date-inputs input::placeholder {
+            color: #64748b;
+        }
+
+        /* Hide number arrows */
+        .date-inputs input::-webkit-outer-spin-button,
+        .date-inputs input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>오늘의 사주</h1>
+            <p class="subtitle">당신의 하루를 미리 확인하세요</p>
+        </header>
+
+        <main class="glass-card" style="max-width: 500px; margin: 0 auto;">
+            <div class="saju-form">
+                <label style="color: #cbd5e1; font-weight: 500;">생년월일을 입력하세요</label>
+                <div class="date-inputs">
+                    <input type="number" id="year" placeholder="년(4자리)" min="1900" max="2100">
+                    <input type="number" id="month" placeholder="월" min="1" max="12">
+                    <input type="number" id="day" placeholder="일" min="1" max="31">
+                </div>
+                <button onclick="checkSaju()" class="btn" style="width: 100%;">운세 확인하기</button>
+            </div>
+
+            <div id="sajuResult" class="saju-result">
+                <h3 style="margin-bottom: 1rem; color: var(--accent-color);">오늘의 운세</h3>
+                <p id="sajuText" style="line-height: 1.6; color: #e2e8f0;"></p>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2026 Playground. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,35 +1,3 @@
-// Lotto Logic
-function generateLotto() {
-    const numbers = new Set();
-    while (numbers.size < 6) {
-        numbers.add(Math.floor(Math.random() * 45) + 1);
-    }
-    const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
-    displayLotto(sortedNumbers);
-}
-
-function displayLotto(numbers) {
-    const container = document.getElementById('lottoResult');
-    container.innerHTML = '';
-
-    numbers.forEach((num, index) => {
-        const ball = document.createElement('div');
-        ball.className = `ball ${getBallColorClass(num)}`;
-        ball.textContent = num;
-        ball.style.animationDelay = `${index * 0.1}s`;
-        container.appendChild(ball);
-    });
-}
-
-function getBallColorClass(num) {
-    if (num <= 10) return 'n1-10';
-    if (num <= 20) return 'n11-20';
-    if (num <= 30) return 'n21-30';
-    if (num <= 40) return 'n31-40';
-    return 'n41-45';
-}
-
-// Saju Logic (Simplified Mock)
 const fortunes = [
     "오늘은 생각지도 못한 행운이 찾아올 수 있습니다. 주변을 잘 살펴보세요!",
     "작은 노력이 큰 결실을 맺는 하루입니다. 꾸준함이 정답입니다.",
@@ -44,21 +12,25 @@ const fortunes = [
 ];
 
 function checkSaju() {
-    const dateInput = document.getElementById('birthdate').value;
-    if (!dateInput) {
-        alert('생년월일을 입력해주세요.');
+    // Get values from the 3 separate inputs
+    const year = document.getElementById('year').value;
+    const month = document.getElementById('month').value;
+    const day = document.getElementById('day').value;
+
+    if (!year || !month || !day) {
+        alert('생년월일을 모두 입력해주세요.');
         return;
     }
 
-    // Purely random logic per click as requested
+    // Purely random logic per click as requested by user previously
     const index = Math.floor(Math.random() * fortunes.length);
     const resultText = document.getElementById('sajuText');
     const resultContainer = document.getElementById('sajuResult');
 
     // Reset animation if already shown to give feedback of new result
     resultContainer.classList.remove('show');
-    resultContainer.classList.add('fade-out'); // Optional textual hint, but class switching is better
-    void resultContainer.offsetWidth; // Trigger reflow for animation restart
+    resultContainer.classList.add('fade-out');
+    void resultContainer.offsetWidth; // Trigger reflow
 
     resultText.textContent = fortunes[index];
     resultContainer.classList.remove('fade-out');

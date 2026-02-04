@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반응속도 테스트 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        #screen {
+            width: 100%;
+            height: 300px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        .waiting {
+            background: #ef4444;
+        }
+
+        .ready {
+            background: #cbd5e1;
+            color: #334155 !important;
+        }
+
+        .now {
+            background: #22c55e;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>반응속도 테스트</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 600px; margin: 0 auto;">
+            <div id="screen" class="waiting" onclick="handleClick()">
+                클릭해서 시작하기
+            </div>
+            <div id="result" style="margin-top: 1rem; text-align: center; font-size: 1.2rem;"></div>
+        </main>
+    </div>
+    <script>
+        const screen = document.getElementById('screen');
+        const result = document.getElementById('result');
+        let startTime;
+        let endTime;
+        let timeoutId;
+        let state = 'waiting'; // waiting, ready, now
+
+        function handleClick() {
+            if (state === 'waiting') {
+                state = 'ready';
+                screen.className = 'ready';
+                screen.textContent = '초록색이 되면 클릭하세요!';
+                result.textContent = '';
+
+                const randomTime = Math.floor(Math.random() * 2000) + 1000;
+                timeoutId = setTimeout(() => {
+                    state = 'now';
+                    screen.className = 'now';
+                    screen.textContent = '클릭!!!';
+                    startTime = new Date();
+                }, randomTime);
+            } else if (state === 'ready') {
+                clearTimeout(timeoutId);
+                state = 'waiting';
+                screen.className = 'waiting';
+                screen.textContent = '너무 빨랐어요! 다시 하려면 클릭.';
+            } else if (state === 'now') {
+                endTime = new Date();
+                const diff = endTime - startTime;
+                state = 'waiting';
+                screen.className = 'waiting';
+                screen.textContent = '클릭해서 다시 시작하기';
+                result.textContent = `당신의 반응속도: ${diff}ms`;
+            }
+        }
+    </script>
+</body>
+
+</html>

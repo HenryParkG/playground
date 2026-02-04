@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비밀번호 생성기 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .result-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+
+        .options {
+            text-align: left;
+            margin: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>비밀번호 생성기</h1>
+        </header>
+
+        <main class="glass-card" style="text-align: center; max-width: 500px; margin: 0 auto;">
+            <div class="result-box" id="result">Click Generate</div>
+
+            <div class="options">
+                <label><input type="checkbox" id="uppercase" checked> 대문자 (A-Z)</label>
+                <label><input type="checkbox" id="numbers" checked> 숫자 (0-9)</label>
+                <label><input type="checkbox" id="symbols" checked> 특수문자 (!@#$)</label>
+                <label>
+                    길이: <span id="lengthVal">12</span>
+                    <input type="range" id="length" min="4" max="32" value="12"
+                        oninput="document.getElementById('lengthVal').textContent = this.value">
+                </label>
+            </div>
+
+            <button class="btn" onclick="generatePw()" style="width: 100%;">생성하기</button>
+            <button class="btn" onclick="copyPw()"
+                style="width: 100%; margin-top: 0.5rem; background: rgba(255,255,255,0.1);">복사하기</button>
+        </main>
+    </div>
+    <script>
+        function generatePw() {
+            const length = document.getElementById('length').value;
+            const useUpper = document.getElementById('uppercase').checked;
+            const useNums = document.getElementById('numbers').checked;
+            const useSyms = document.getElementById('symbols').checked;
+
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const syms = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
+
+            let chars = lower;
+            if (useUpper) chars += upper;
+            if (useNums) chars += nums;
+            if (useSyms) chars += syms;
+
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+
+            document.getElementById('result').textContent = result;
+        }
+
+        function copyPw() {
+            const text = document.getElementById('result').textContent;
+            navigator.clipboard.writeText(text).then(() => alert('복사되었습니다!'));
+        }
+
+        generatePw(); // Init
+    </script>
+</body>
+
+</html>

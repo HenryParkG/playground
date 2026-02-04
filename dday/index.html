@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D-Day 계산기 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .result-days {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>D-Day 계산기</h1>
+        </header>
+
+        <main class="glass-card" style="text-align: center; max-width: 500px; margin: 0 auto;">
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; margin-bottom: 0.5rem; text-align: left;">기준 날짜 (Target Date)</label>
+                <input type="date" id="dateInput"
+                    style="width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px;">
+            </div>
+
+            <button class="btn" onclick="calc()" style="width: 100%;">계산하기</button>
+
+            <div id="result" style="display: none; margin-top: 2rem;">
+                <p>기준일까지</p>
+                <div class="result-days" id="daysText">D-0</div>
+                <p id="subText"></p>
+            </div>
+        </main>
+    </div>
+    <script>
+        function calc() {
+            const input = document.getElementById('dateInput').value;
+            if (!input) return alert('날짜를 선택해주세요');
+
+            const target = new Date(input);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            target.setHours(0, 0, 0, 0);
+
+            const diff = target - today;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            const resultDiv = document.getElementById('result');
+            const dayText = document.getElementById('daysText');
+            const sub = document.getElementById('subText');
+
+            resultDiv.style.display = 'block';
+
+            if (days > 0) {
+                dayText.textContent = `D-${days}`;
+                sub.textContent = `${days}일 남았습니다.`;
+            } else if (days < 0) {
+                dayText.textContent = `D+${Math.abs(days)}`;
+                sub.textContent = `${Math.abs(days)}일 지났습니다.`;
+            } else {
+                dayText.textContent = `D-Day`;
+                sub.textContent = `오늘입니다!`;
+            }
+        }
+    </script>
+</body>
+
+</html>
