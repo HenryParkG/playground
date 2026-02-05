@@ -4,151 +4,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playground - Lotto & Saju</title>
+    <title>Playground - Premium Web Utilities</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
         <header>
             <h1>Playground</h1>
-            <p class="subtitle">행운의 숫자와 오늘의 운세를 확인하세요</p>
+            <p class="subtitle">모든 유틸리티를 한곳에서, 더 아름답게</p>
         </header>
 
+        <!-- Top Ad Slot -->
+        <div class="ad-slot-horizontal">
+            <span>Advertisement (AdSense Reservation)</span>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">전체</button>
+            <button class="filter-btn" data-filter="productivity">생산성</button>
+            <button class="filter-btn" data-filter="utility">유틸리티</button>
+            <button class="filter-btn" data-filter="fortune">운세/추천</button>
+            <button class="filter-btn" data-filter="fun">재미/휴식</button>
+            <button class="filter-btn reset-btn" onclick="resetFilters()">초기화</button>
+        </div>
+
         <main class="nav-grid">
-            <a href="lotto/index.html" class="glass-card nav-card">
+            <!-- Lotto -->
+            <a href="lotto/index.html" class="glass-card nav-card" data-category="fortune">
                 <div class="nav-icon">🎱</div>
                 <h2>로또 번호 생성기</h2>
                 <p>행운의 6자리 숫자를 추천해드립니다.</p>
             </a>
 
-            <a href="saju/index.html" class="glass-card nav-card">
+            <!-- Saju -->
+            <a href="saju/index.html" class="glass-card nav-card" data-category="fortune">
                 <div class="nav-icon">🔮</div>
                 <h2>오늘의 사주</h2>
                 <p>생년월일로 보는 간단한 오늘의 운세.</p>
             </a>
 
-            <a href="food/index.html" class="glass-card nav-card">
+            <!-- Food Picker -->
+            <a href="food/index.html" class="glass-card nav-card" data-category="fortune">
                 <div class="nav-icon">🍔</div>
                 <h2>오늘 뭐 먹지?</h2>
                 <p>점심 메뉴가 고민될 때 눌러보세요.</p>
             </a>
 
             <!-- MBTI -->
-            <a href="mbti/index.html" class="glass-card nav-card">
+            <a href="mbti/index.html" class="glass-card nav-card" data-category="fortune">
                 <div class="nav-icon">🧠</div>
                 <h2>성향 테스트</h2>
                 <p>초간단 MBTI로 내 성향 알아보기</p>
             </a>
 
             <!-- Reaction -->
-            <a href="reaction/index.html" class="glass-card nav-card">
+            <a href="reaction/index.html" class="glass-card nav-card" data-category="fun">
                 <div class="nav-icon">⚡</div>
                 <h2>반응속도</h2>
                 <p>내 손가락은 얼마나 빠를까?</p>
             </a>
 
             <!-- Timer -->
-            <a href="timer/index.html" class="glass-card nav-card">
+            <a href="timer/index.html" class="glass-card nav-card" data-category="productivity">
                 <div class="nav-icon">⏱️</div>
                 <h2>뽀모도로 타이머</h2>
                 <p>집중을 위한 25분 타이머</p>
             </a>
 
             <!-- Password -->
-            <a href="password/index.html" class="glass-card nav-card">
+            <a href="password/index.html" class="glass-card nav-card" data-category="utility">
                 <div class="nav-icon">🔐</div>
                 <h2>비밀번호 생성</h2>
                 <p>강력한 보안 비밀번호 만들기</p>
             </a>
 
             <!-- Stopwatch -->
-            <a href="stopwatch/index.html" class="glass-card nav-card">
+            <a href="stopwatch/index.html" class="glass-card nav-card" data-category="productivity">
                 <div class="nav-icon">🏃</div>
                 <h2>스톱워치</h2>
                 <p>시간을 기록하세요</p>
             </a>
 
             <!-- D-Day -->
-            <a href="dday/index.html" class="glass-card nav-card">
+            <a href="dday/index.html" class="glass-card nav-card" data-category="productivity">
                 <div class="nav-icon">📅</div>
                 <h2>D-Day 계산기</h2>
                 <p>기념일까지 며칠 남았을까?</p>
             </a>
 
             <!-- Text -->
-            <a href="text/index.html" class="glass-card nav-card">
+            <a href="text/index.html" class="glass-card nav-card" data-category="productivity">
                 <div class="nav-icon">📝</div>
                 <h2>글자수 세기</h2>
                 <p>자기소개서, 리포트 글자수 확인</p>
             </a>
 
-            <!-- New Phase 2 Tools -->
-
             <!-- Converter -->
-            <a href="converter/index.html" class="glass-card nav-card">
+            <a href="converter/index.html" class="glass-card nav-card" data-category="utility">
                 <div class="nav-icon">📏</div>
                 <h2>단위 변환기</h2>
                 <p>길이, 무게 단위 간편 변환</p>
             </a>
 
             <!-- BMI -->
-            <a href="bmi/index.html" class="glass-card nav-card">
+            <a href="bmi/index.html" class="glass-card nav-card" data-category="utility">
                 <div class="nav-icon">⚖️</div>
                 <h2>BMI 계산기</h2>
                 <p>내 체질량지수 확인하기</p>
             </a>
 
             <!-- Todo -->
-            <a href="todo/index.html" class="glass-card nav-card">
+            <a href="todo/index.html" class="glass-card nav-card" data-category="productivity">
                 <div class="nav-icon">✅</div>
                 <h2>할 일 목록</h2>
                 <p>오늘 할 일 잊지 않기</p>
             </a>
 
             <!-- Tip -->
-            <a href="tip/index.html" class="glass-card nav-card">
+            <a href="tip/index.html" class="glass-card nav-card" data-category="utility">
                 <div class="nav-icon">💸</div>
                 <h2>팁 계산기</h2>
                 <p>더치페이, 팁 계산을 한번에</p>
             </a>
 
             <!-- Color -->
-            <a href="color/index.html" class="glass-card nav-card">
+            <a href="color/index.html" class="glass-card nav-card" data-category="fun">
                 <div class="nav-icon">🎨</div>
                 <h2>색상 팔레트</h2>
                 <p>예쁜 색상 조합 찾기</p>
             </a>
 
             <!-- Breathe -->
-            <a href="breathe/index.html" class="glass-card nav-card">
+            <a href="breathe/index.html" class="glass-card nav-card" data-category="fun">
                 <div class="nav-icon">🧘</div>
                 <h2>심호흡</h2>
                 <p>마음의 안정을 찾는 시간</p>
             </a>
 
             <!-- Age -->
-            <a href="age/index.html" class="glass-card nav-card">
+            <a href="age/index.html" class="glass-card nav-card" data-category="utility">
                 <div class="nav-icon">🎂</div>
                 <h2>만 나이 계산</h2>
                 <p>정확한 만 나이와 생존일수</p>
             </a>
 
             <!-- RPS -->
-            <a href="rps/index.html" class="glass-card nav-card">
+            <a href="rps/index.html" class="glass-card nav-card" data-category="fun">
                 <div class="nav-icon">✊</div>
                 <h2>가위바위보</h2>
                 <p>컴퓨터와 승부하기</p>
             </a>
         </main>
+
+        <!-- Bottom Ad Slot -->
+        <div class="ad-slot-horizontal">
+            <span>Bottom Banner Ad Area</span>
+        </div>
     </div>
 
     <footer>
         <p>© 2026 Playground. All rights reserved.</p>
     </footer>
+
+    <script>
+        const filterBtns = document.querySelectorAll('.filter-btn:not(.reset-btn)');
+        const cards = document.querySelectorAll('.glass-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.getAttribute('data-filter');
+
+                // Active 버튼 상태 변경
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // 카드 필터링
+                cards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    if (filter === 'all' || category === filter) {
+                        card.classList.remove('hidden');
+                        card.style.animation = 'popIn 0.5s ease forwards';
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        function resetFilters() {
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            cards.forEach(card => {
+                card.classList.remove('hidden');
+                card.style.animation = 'popIn 0.5s ease forwards';
+            });
+        }
+    </script>
 </body>
 
 </html>
