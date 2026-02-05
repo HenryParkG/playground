@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR코드 생성기 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        #qrcode {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>QR코드 생성기</h1>
+            <p class="subtitle">텍스트나 링크를 입력하면 QR코드가 생성됩니다.</p>
+        </header>
+
+        <main class="glass-card" style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <input type="text" id="qrInput" placeholder="https://example.com" value="https://">
+            <button class="btn" style="width: 100%;" onclick="makeCode()">QR코드 생성</button>
+
+            <div id="qrcode"></div>
+
+            <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.9rem;">
+                생성된 이미지를 우클릭하여 저장할 수 있습니다.
+            </p>
+        </main>
+    </div>
+    <script>
+        const qrcode = new QRCode(document.getElementById("qrcode"), {
+            width: 200,
+            height: 200
+        });
+
+        function makeCode() {
+            const text = document.getElementById("qrInput").value;
+            if (!text) {
+                alert("내용을 입력해주세요");
+                return;
+            }
+            qrcode.makeCode(text);
+        }
+
+        makeCode();
+    </script>
+</body>
+
+</html>
