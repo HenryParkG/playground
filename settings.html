@@ -112,7 +112,7 @@
                         <p>시스템 설정과 관계없이 다크 테마를 항상 사용합니다.</p>
                     </div>
                     <label class="toggle-switch">
-                        <input type="checkbox" checked disabled>
+                        <input type="checkbox" id="darkModeToggle" checked>
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -122,7 +122,7 @@
                 <div class="setting-row">
                     <div class="setting-info">
                         <h3>효과음 사용</h3>
-                        <p>타이머나 게임 중 알림음을 재생합니다.</p>
+                        <p>타이머나 게임 중 알림음을 재생합니다 (지원되는 도구에만 적용).</p>
                     </div>
                     <label class="toggle-switch">
                         <input type="checkbox" id="soundToggle">
@@ -135,23 +135,50 @@
                 <div class="setting-row">
                     <div class="setting-info">
                         <h3>시각 효과 강화</h3>
-                        <p>배경 애니메이션과 블러 효과를 최대로 설정합니다.</p>
+                        <p>배경 애니메이션과 블러 효과를 활성화합니다.</p>
                     </div>
                     <label class="toggle-switch">
-                        <input type="checkbox" checked id="fxToggle">
+                        <input type="checkbox" id="fxToggle">
                         <span class="slider"></span>
                     </label>
                 </div>
             </div>
 
             <div style="margin-top: 3rem; text-align: center;">
-                <button class="btn" style="width: 100%;" onclick="saveSettings()">설정 저장하기</button>
+                <button class="btn" style="width: 100%;" onclick="handleSave()">설정 저장하기</button>
             </div>
         </div>
     </div>
+
+    <script src="settings-engine.js"></script>
     <script>
-        function saveSettings() {
-            alert('설정이 저장되었습니다. (데모 버전)');
+        // 현재 설정값 로드하여 UI 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            const settings = SettingsEngine.getSettings();
+            document.getElementById('darkModeToggle').checked = settings.darkMode === 'always';
+            document.getElementById('soundToggle').checked = settings.useSound;
+            document.getElementById('fxToggle').checked = settings.enhancedFX;
+        });
+
+        function handleSave() {
+            const newSettings = {
+                darkMode: document.getElementById('darkModeToggle').checked ? 'always' : 'system',
+                useSound: document.getElementById('soundToggle').checked,
+                enhancedFX: document.getElementById('fxToggle').checked
+            };
+
+            SettingsEngine.saveSettings(newSettings);
+
+            // 저장 완료 피드백
+            const btn = document.querySelector('.btn');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ 설정이 저장되었습니다!';
+            btn.style.background = '#22c55e';
+
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '';
+            }, 2000);
         }
     </script>
 </body>
