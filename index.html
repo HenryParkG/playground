@@ -308,32 +308,49 @@
         const todayKey = `daily-${new Date().toISOString().split('T')[0]}`;
         const totalKey = "global-total";
 
-        async function updateStats(isClick = false) {
+        async function updateStats(isCounterUpdate = false) {
             try {
-                // 1. Update/Fetch Daily Hits
-                const dayRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${todayKey}${isClick ? '/up' : ''}`);
+                // 실시간성을 높이기 위해 페이지 진입 시(새로고침/뒤로가기 등) 무조건 서버에 히트 전송
+                const mode = isCounterUpdate ? 'up' : 'get';
+                const dayUrl = `https://api.counterapi.dev/v1/${namespace}/${todayKey}/up`;
+                const totalUrl = `https://api.counterapi.dev/v1/${namespace}/${totalKey}/up`;
+
+                const [dayRes, totalRes] = await Promise.all([
+                    fetch(dayUrl),
+                    fetch(totalUrl)
+                ]);
+
                 const dayData = await dayRes.json();
+                const totalData = await totalRes.json();
+
                 if (dayData && dayData.count !== undefined) {
                     todayHitsEl.textContent = dayData.count.toLocaleString();
                 }
 
-                // 2. Update/Fetch Total Hits
-                const totalRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${totalKey}${isClick ? '/up' : ''}`);
-                const totalData = await totalRes.json();
                 if (totalData && totalData.count !== undefined) {
-                    const total = totalData.count + 54200; // Base baseline
-                    totalHitsEl.textContent = (total / 1000).toFixed(1) + 'k';
+                    const total = totalData.count + 54200;
+                    // 소수점 2자리까지 보여주어 미세한 변화(뒤로가기 등)도 즉시 반영되게 함
+                    totalHitsEl.textContent = (total / 1000).toFixed(2) + 'k';
                 }
             } catch (err) {
-                console.warn("Stats API error.");
+                console.warn("Stats API sync...");
             }
         }
 
-        // 초기 실행
-        updateStats();
+        // 초기 실행: 페이지 로드 시 '방문'으로 간주하여 서버 숫자 +1
+        updateStats(true);
 
-        // 30초마다 전역 스탯 동기화
-        setInterval(() => updateStats(false), 30000);
+        // 30초마다 전역 스탯 동기화 (조회만)
+        setInterval(async () => {
+            try {
+                const dayRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${todayKey}`);
+                const totalRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${totalKey}`);
+                const dayData = await dayRes.json();
+                const totalData = await totalRes.json();
+                if (dayData.count) todayHitsEl.textContent = dayData.count.toLocaleString();
+                if (totalData.count) totalHitsEl.textContent = ((totalData.count + 54200) / 1000).toFixed(2) + 'k';
+            } catch (e) { }
+        }, 30000);
 
         // 2. Navigation & Filtering
         const navLinks = document.querySelectorAll('.nav-link[data-filter]');
