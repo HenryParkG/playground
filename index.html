@@ -62,12 +62,12 @@
             <div class="sidebar-widget">
                 <div class="widget-title">📊 Live Platform Stats</div>
                 <div class="stat-item">
-                    <span>Active Users</span>
-                    <span class="stat-value" id="active-users-val">1,284</span>
+                    <span>Today's Hits</span>
+                    <span class="stat-value" id="today-hits-val">0</span>
                 </div>
                 <div class="stat-item">
-                    <span>Tools Run</span>
-                    <span class="stat-value" id="tools-run-val">42.5k</span>
+                    <span>Total Global Hits</span>
+                    <span class="stat-value" id="total-hits-val">0</span>
                 </div>
                 <div class="stat-item">
                     <span>Server Status</span>
@@ -301,56 +301,39 @@
         }
 
         // --- Real-time Global Stats Engine (CounterAPI.dev) ---
-        const activeUsersEl = document.getElementById('active-users-val');
-        const toolsRunEl = document.getElementById('tools-run-val');
+        const todayHitsEl = document.getElementById('today-hits-val');
+        const totalHitsEl = document.getElementById('total-hits-val');
 
-        // 고유 네임스페이스와 키 (첫 클릭 시 자동 생성됨)
-        const namespace = "playground-v2-stats";
-        const key = "total-usage-count";
+        const namespace = "playground-v3-final";
+        const todayKey = `daily-${new Date().toISOString().split('T')[0]}`;
+        const totalKey = "global-total";
 
-        async function fetchGlobalStats(isUpdate = false) {
+        async function updateStats(isClick = false) {
             try {
-                const url = `https://api.counterapi.dev/v1/${namespace}/${key}${isUpdate ? '/up' : ''}`;
-                const response = await fetch(url);
-
-                // 만약 서버에 기록이 없으면(400/404) catch 블록으로 가거나 데이터가 null일 수 있음
-                if (!response.ok && !isUpdate) {
-                    throw new Error('Initial record not found');
+                // 1. Update/Fetch Daily Hits
+                const dayRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${todayKey}${isClick ? '/up' : ''}`);
+                const dayData = await dayRes.json();
+                if (dayData && dayData.count !== undefined) {
+                    todayHitsEl.textContent = dayData.count.toLocaleString();
                 }
 
-                const data = await response.json();
-
-                if (data && data.count !== undefined) {
-                    const total = data.count + 52400; // Base baseline
-                    toolsRunEl.textContent = (total / 1000).toFixed(1) + 'k';
+                // 2. Update/Fetch Total Hits
+                const totalRes = await fetch(`https://api.counterapi.dev/v1/${namespace}/${totalKey}${isClick ? '/up' : ''}`);
+                const totalData = await totalRes.json();
+                if (totalData && totalData.count !== undefined) {
+                    const total = totalData.count + 54200; // Base baseline
+                    totalHitsEl.textContent = (total / 1000).toFixed(1) + 'k';
                 }
             } catch (err) {
-                // 기록이 없거나 서버 오류 시: 기본 베이스라인 표시 및 로컬 카운트 활용
-                let localCount = parseInt(localStorage.getItem('playground_hits_v2') || '0');
-                if (isUpdate) {
-                    localCount++;
-                    localStorage.setItem('playground_hits_v2', localCount);
-                }
-                const total = 52400 + localCount;
-                toolsRunEl.textContent = (total / 1000).toFixed(1) + 'k';
-                console.log("Stats synced locally until first global hit.");
+                console.warn("Stats API error.");
             }
         }
 
-        function updateLiveUsers() {
-            const hour = new Date().getHours();
-            let base = (hour > 8 && hour < 23) ? 120 : 30;
-            const liveUsers = base + Math.floor(Math.random() * 40);
-            activeUsersEl.textContent = liveUsers.toLocaleString();
-        }
-
         // 초기 실행
-        fetchGlobalStats();
-        updateLiveUsers();
+        updateStats();
 
-        // 주기적 업데이트
-        setInterval(() => fetchGlobalStats(false), 30000);
-        setInterval(updateLiveUsers, 7000);
+        // 30초마다 전역 스탯 동기화
+        setInterval(() => updateStats(false), 30000);
 
         // 2. Navigation & Filtering
         const navLinks = document.querySelectorAll('.nav-link[data-filter]');
@@ -381,7 +364,7 @@
         // 3. Track Global Clicks
         cards.forEach(card => {
             card.addEventListener('click', () => {
-                fetchGlobalStats(true);
+                updateStats(true);
             });
         });
     </script>
