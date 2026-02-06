@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모스 부호 변환기 - Playground</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        textarea {
+            height: 120px;
+            resize: none;
+            margin-bottom: 1rem;
+        }
+
+        .swap-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← 메인으로 돌아가기</a>
+            <h1>모스 부호 변환기</h1>
+        </header>
+
+        <main class="glass-card" style="max-width: 700px; margin: 0 auto;">
+            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Text / Morse Code</label>
+            <textarea id="input" placeholder="여기에 텍스트나 모스 부호를 입력하세요..."></textarea>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <button class="btn" onclick="toMorse()">모스 부호로 변환 ↓</button>
+                <button class="btn" onclick="fromMorse()">텍스트로 복원 ↑</button>
+            </div>
+
+            <label style="display: block; margin: 2rem 0 0.5rem; font-weight: 600;">Result</label>
+            <textarea id="output" readonly placeholder="결과가 여기에 표시됩니다..."></textarea>
+        </main>
+    </div>
+    <script>
+        const MORSE_CODE = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+            'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+            'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+            'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+            'Y': '-.--', 'Z': '--..', '1': '.----', '2': '..---', '3': '...--',
+            '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+            '9': '----.', '0': '-----', ' ': '/'
+        };
+        const REVERSE_MORSE = Object.fromEntries(Object.entries(MORSE_CODE).map(([k, v]) => [v, k]));
+
+        function toMorse() {
+            const input = document.getElementById('input').value.toUpperCase();
+            const result = input.split('').map(char => MORSE_CODE[char] || char).join(' ');
+            document.getElementById('output').value = result;
+        }
+
+        function fromMorse() {
+            const input = document.getElementById('input').value.trim();
+            const result = input.split(' ').map(code => REVERSE_MORSE[code] || code).join('');
+            document.getElementById('output').value = result;
+        }
+    </script>
+</body>
+
+</html>
